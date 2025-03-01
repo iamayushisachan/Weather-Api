@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #141414;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        input {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            width: 250px;
+        }
+        button {
+            padding: 10px 15px;
+            font-size: 16px;
+            background-color: #e50914;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .weather-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            width: 300px;
+        }
+        .weather-box h3 {
+            margin: 0;
+            font-size: 22px;
+        }
+        .weather-box p {
+            margin: 5px 0;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Weather App</h1>
+        <div class="search-box">
+            <input type="text" id="location" placeholder="Enter city name" />
+            <button onclick="getWeather()">Get Weather</button>
+        </div>
+        <div class="weather-box" id="weatherBox" style="display: none;">
+            <h3 id="city"></h3>
+            <p id="temperature"></p>
+            <p id="condition"></p>
+        </div>
+    </div>
+    
+    <script>
+        function getWeather() {
+            const location = document.getElementById('location').value;
+            if (!location) {
+                alert('Please enter a location');
+                return;
+            }
+            
+            const apiKey = 'ce1d116c1607429a9be121003250103';
+            const url = `http://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${location}&aqi=yes`;
+            
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('city').innerText = data.location.name;
+                    document.getElementById('temperature').innerText = `Temperature: ${data.current.temp_c}°C`;
+                    document.getElementById('condition').innerText = `Condition: ${data.current.condition.text}`;
+                    document.getElementById('weatherBox').style.display = 'block';
+                })
+                .catch(error => {
+                    alert('Error fetching weather data. Please check the location and try again.');
+                });
+        }
+    </script>
+</body>
+</html>
